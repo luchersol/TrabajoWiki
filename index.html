@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Aprende Python - Módulo interactivo mejorado</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Módulo interactivo: Aprende Python desde cero</h1>
+    <p class="intro">Aprende Python dentro de una temática divertida: <strong>"La aventura del programador explorador"</strong>. Completa los retos para ayudar a nuestro explorador digital a avanzar.</p>
+
+    <div class="stats">
+        ✔️ Correctas: <span id="correct-count">0</span> &nbsp;&nbsp; ❌ Incorrectas: <span id="incorrect-count">0</span>
+    </div>
+
+    <div id="quiz"></div>
+
+    <script>
+        let correctCount = 0;
+        let incorrectCount = 0;
+
+        function updateStats() {
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = incorrectCount;
+        }
+
+        const questions = [
+            {
+                id: "q1",
+                tutorial: "En Python, `print()` se usa para mostrar mensajes en pantalla. Los textos siempre van entre comillas, simples '...' o dobles \"...\". Esto indica que Python los trata como cadenas de caracteres.",
+                explain: "Estás en lo alto de una montaña. Para expresar tu satisfacción al mundo, necesitas usar print() correctamente.",
+                title: "1) Enviar un mensaje mágico",
+                exerciseHtml: 'Grita: <pre class="exercise">print(<span class="drop" data-expected=\'"Success"\'>_____</span>)</pre>',
+                options: ['"Success"', 'Success', 'print Success', 'mensaje'],
+                correctFeedback: '¡El mundo te escucha! print() siempre recibe cadenas entre comillas.',
+                wrongFeedback: 'El mundo no entienden mensajes sin comillas.',
+                imageUrl: 'images/q1.png'
+            },
+            {
+                id: "q2",
+                tutorial: "Las variables son cofres donde guardamos tesoros (valores). Para asignar un valor a una variable, usamos el símbolo `=`. Por ejemplo, `oro = 100` guarda el número 100 dentro de la variable 'oro'.",
+                explain: "En la Cueva de los Datos necesitas guardar valores dentro de cofres (variables).",
+                title: "2) Guardar un tesoro en una variable",
+                exerciseHtml: 'Completa el cofre: <pre class="exercise">oro <span class="drop" data-expected="=">_____</span> <span class="drop" data-expected="100">_____</span></pre>',
+                options: ['=', '==', '100', '"100"'],
+                correctFeedback: '¡Tesoro asegurado! = asigna un valor a la variable.',
+                wrongFeedback: 'Ese cofre no se cierra. Usa = para guardar el valor.',
+                imageUrl: 'images/q2.png'
+            },
+            {
+                id: "q3",
+                tutorial: "Las listas en Python son colecciones de elementos ordenados. Python empieza a contar desde 0, así que el primer elemento está en la posición 0, el segundo en la 1, y así sucesivamente.",
+                explain: "Dentro de la Piramide de los Arreglos encuentras listas antiguas. Para leerlas, debes recordar que empiezan en 0.",
+                title: "3) Leer un símbolo antiguo",
+                exerciseHtml: 'Descifra: <pre class="exercise">runas = ["luna", "estrella", "sol"]\nprint(runas[<span class="drop" data-expected="2">_____</span>])</pre>',
+                options: ['0', '1', '2', '3'],
+                correctFeedback: 'Correcto. La runa 2 es "sol".',
+                wrongFeedback: 'Esa no es la runa. Revisa la numeración.',
+                imageUrl: 'images/q3.png'
+            },
+            {
+                id: "q4",
+                tutorial: "Las condiciones permiten que tu código tome decisiones. La instrucción `if` comprueba si algo es verdadero, y solo entonces ejecuta el bloque de código dentro.",
+                explain: "Llegas al Puente del Juicio. Solo pasarás si sabes usar correctamente las condiciones.",
+                title: "4) Evaluar una condición",
+                exerciseHtml: 'Completa: <pre class="exercise">energia = 9\n<span class="drop" data-expected="if">_____</span> energia <span class="drop" data-expected=">">_____</span> 5:<br>    print("Energía suficiente")</pre>',
+                options: ['if', 'elif', '>', '<', 'else'],
+                correctFeedback: '¡El puente reconoce tu energía! if energia > 5.',
+                wrongFeedback: 'El puente rechaza una sintaxis incorrecta.'
+            },
+            {
+                id: "q5",
+                tutorial: "Los bucles `for` permiten repetir acciones varias veces. `for paso in range(3):` repetirá el bloque tres veces, con `paso` tomando los valores 0, 1 y 2.",
+                explain: "Estás en la Torre del Tiempo, donde los bucles controlan el flujo.",
+                title: "5) Repetir un ritual",
+                exerciseHtml: 'Completa: <pre class="exercise">for paso <span class="drop" data-expected="in">_____</span> range(3):<br>    print(paso)</pre>',
+                options: ['in', 'on', '=>', 'to'],
+                correctFeedback: 'Ritual ejecutado correctamente.',
+                wrongFeedback: 'Ese no es el conjuro de repetición.'
+            }
+        ];
+
+        const container = document.getElementById('quiz');
+
+        function render() {
+            container.innerHTML = '';
+            questions.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-content" style="display: flex; gap: 20px;">
+                        <!-- Mitad izquierda: contenido -->
+                        <div class="left" style="flex: 1;">
+                            <div class="tutorial">${q.tutorial}</div>
+                            <div class="explain">${q.explain}</div>
+                            <strong>${q.title}</strong>
+                            <div class="exercise-area">${q.exerciseHtml}</div>
+                            <div class="tokens" id="${q.id}-tokens"></div>
+                            <div class="controls">
+                                <button type="button" data-check="${q.id}">Comprobar</button>
+                            </div>
+                            <div id="${q.id}-fb"></div>
+                        </div>
+
+                        <!-- Mitad derecha: imagen -->
+                        <div class="right" style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                            <img src="${q.imageUrl}" alt="Imagen ilustrativa" style="max-width: 100%; height: auto; border-radius: 8px;">
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+
+                const tokensContainer = card.querySelector(`#${q.id}-tokens`);
+                q.options.forEach(opt => {
+                    const tok = document.createElement('div');
+                    tok.className = 'token';
+                    tok.draggable = true;
+                    tok.dataset.value = opt;
+                    tok.textContent = opt;
+                    tokensContainer.appendChild(tok);
+
+                    tok.addEventListener('dragstart', e => {
+                        if (!tok.classList.contains('used')) { // bloquear si ya usado
+                            e.dataTransfer.setData('text/plain', opt);
+                        } else {
+                            e.preventDefault();
+                        }
+                    });
+                });
+
+                const drops = card.querySelectorAll('.drop');
+                drops.forEach(d => {
+                    d.addEventListener('dragover', e => {
+                        e.preventDefault(); 
+                        d.classList.add('over');
+                    });
+                    d.addEventListener('dragleave', () => d.classList.remove('over'));
+                    d.addEventListener('drop', e => {
+                        e.preventDefault(); 
+                        d.classList.remove('over');
+                        const val = e.dataTransfer.getData('text/plain');
+                        d.textContent = val;
+                        d.dataset.current = val;
+                        d.classList.remove('success', 'fail');
+                    });
+                });
+
+                // Botón de comprobar
+                card.querySelector(`[data-check="${q.id}"]`).addEventListener('click', () => {
+                    const fb = card.querySelector(`#${q.id}-fb`);
+                    fb.innerHTML = '';
+                    let allCorrect = true;
+
+                    drops.forEach(d => {
+                        const expected = d.dataset.expected;
+                        const current = d.dataset.current || '';
+
+                        if (current === expected) {
+                            d.classList.add('success');
+                            d.classList.remove('fail');
+                            d.classList.add('used'); // bloquea el drop para que no cambie
+                        } else {
+                            d.classList.add('fail');
+                            d.classList.remove('success');
+                            allCorrect = false;
+                        }
+                    });
+
+                    // Feedback general debajo
+                    if (allCorrect) {
+                        fb.innerHTML = `<div class="feedback correct">${q.correctFeedback}</div>`;
+                        // Sumar puntos solo una vez por ejercicio completo
+                        if (!fb.dataset.checked) {
+                            correctCount++;
+                            fb.dataset.checked = "true";
+                        }
+                    } else {
+                        fb.innerHTML = `<div class="feedback wrong">${q.wrongFeedback}</div>`;
+                        if (!fb.dataset.checked) {
+                            incorrectCount++;
+                            fb.dataset.checked = "true";
+                        }
+                    }
+
+                    updateStats();
+                });
+
+            });
+        }
+
+        render();
+    </script>
+</body>
+</html>

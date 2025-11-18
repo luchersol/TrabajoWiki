@@ -1,0 +1,169 @@
+/* Fondo bonito */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+    background: linear-gradient(135deg, #a8edea, #fed6e3); /* gradiente suave */
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Opcional: patrón sutil encima del gradiente */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* patrón sutil */
+    opacity: 0.1; /* muy tenue */
+    pointer-events: none;
+}
+
+/* Estilos generales */
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.intro {
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+/* Estadísticas */
+.stats {
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+/* Card de preguntas */
+.card {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Card contenido */
+.card strong {
+    display: block;
+    margin-top: 15px;
+    font-size: 1.1em;
+}
+
+.tutorial, .explain {
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.exercise-area pre {
+    background-color: #eef2f5;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+}
+
+/* Tokens arrastrables */
+.tokens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.token {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: grab;
+    user-select: none;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.token.used {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* Drop zones */
+.drop {
+    display: inline-block;
+    min-width: 60px;
+    padding: 2px 6px;
+    margin: 0 2px;
+    background-color: #fff3cd;
+    border: 2px dashed #ffc107;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.drop.over {
+    background-color: #ffe69c;
+    border-color: #ffca2c;
+}
+
+.drop.success {
+    background-color: #d1e7dd;
+    border-color: #0f5132;
+    color: #0f5132;
+}
+
+.drop.fail {
+    background-color: #f8d7da;
+    border-color: #842029;
+    color: #842029;
+}
+
+/* Botones */
+.controls {
+    margin-top: 10px;
+}
+
+.controls button {
+    padding: 6px 12px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0d6efd;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.controls button:hover {
+    background-color: #0b5ed7;
+}
+
+/* Pequeñas instrucciones */
+.small {
+    font-size: 0.85em;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Imágenes */
+.right img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Feedback textual */
+#quiz .card #fb {
+    margin-top: 8px;
+    font-weight: bold;
+}
