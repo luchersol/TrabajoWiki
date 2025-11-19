@@ -63,6 +63,26 @@ h1 {
     font-size: 0.95em;
 }
 
+.feedback {
+    margin: 2px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+/* Feedback: correcto / incorrecto */
+.feedback.correct {
+    background-color: #d1e7dd; /* verde suave */
+    color: #0f5132;
+    border: 1px solid #0f5132;
+}
+
+.feedback.wrong {
+    background-color: #f8d7da; /* rojo suave */
+    color: #842029;
+    border: 1px solid #842029;
+}
+
 .exercise-area pre {
     background-color: #eef2f5;
     padding: 10px;
@@ -167,3 +187,11 @@ h1 {
     margin-top: 8px;
     font-weight: bold;
 }
+
+#slider {
+    scroll-snap-type: x mandatory;
+}
+.card {
+    scroll-snap-align: center;
+}
+

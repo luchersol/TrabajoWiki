@@ -16,14 +16,15 @@
 
     <div id="quiz"></div>
 
-    <script>
-        let correctCount = 0;
-        let incorrectCount = 0;
+    <div id="resultModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;">
+        <div style="background:#fff;padding:30px;border-radius:12px;max-width:400px;width:90%;text-align:center;position:relative;">
+            <h2>¡Has completado el módulo!</h2>
+            <p id="modalText"></p>
+            <button id="closeModal" style="margin-top:20px;padding:8px 16px;border:none;background:#28a745;color:#fff;border-radius:6px;cursor:pointer;">Reiniciar 🔄</button>
+        </div>
+    </div>
 
-        function updateStats() {
-            document.getElementById('correct-count').textContent = correctCount;
-            document.getElementById('incorrect-count').textContent = incorrectCount;
-        }
+    <script>
 
         const questions = [
             {
@@ -64,54 +65,91 @@
                 tutorial: "Las condiciones permiten que tu código tome decisiones. La instrucción `if` comprueba si algo es verdadero, y solo entonces ejecuta el bloque de código dentro.",
                 explain: "Llegas al Puente del Juicio. Solo pasarás si sabes usar correctamente las condiciones.",
                 title: "4) Evaluar una condición",
-                exerciseHtml: 'Completa: <pre class="exercise">energia = 9\n<span class="drop" data-expected="if">_____</span> energia <span class="drop" data-expected=">">_____</span> 5:<br>    print("Energía suficiente")</pre>',
+                exerciseHtml: 'Comprueba el viento: <pre class="exercise">viento = 9\n<span class="drop" data-expected="if">_____</span> viento <span class="drop" data-expected="<">_____</span> 10:<br>    print("Viento inferior a 10")</pre>',
                 options: ['if', 'elif', '>', '<', 'else'],
-                correctFeedback: '¡El puente reconoce tu energía! if energia > 5.',
-                wrongFeedback: 'El puente rechaza una sintaxis incorrecta.'
+                correctFeedback: '¡El viento está calmado! if viento < 10.',
+                wrongFeedback: '¿Seguro que estás comprobando bien?',
+                imageUrl: 'images/q4.png'
             },
             {
                 id: "q5",
-                tutorial: "Los bucles `for` permiten repetir acciones varias veces. `for paso in range(3):` repetirá el bloque tres veces, con `paso` tomando los valores 0, 1 y 2.",
+                tutorial: "En Python, un bucle *for* sirve para repetir instrucciones. La función *range(n)* genera una secuencia de números desde 0 hasta n-1. Por ejemplo, range(2) produce 0 y 1, así que el bloque dentro del for se ejecuta dos veces.<br>",
                 explain: "Estás en la Torre del Tiempo, donde los bucles controlan el flujo.",
-                title: "5) Repetir un ritual",
-                exerciseHtml: 'Completa: <pre class="exercise">for paso <span class="drop" data-expected="in">_____</span> range(3):<br>    print(paso)</pre>',
-                options: ['in', 'on', '=>', 'to'],
+                title: "5) Muestra todos los pasos <u>saltándote el primero</u>",
+                exerciseHtml: 'Completa: <pre class="exercise">pasos = ["Revisar hora", "Subir torre", "Vencer jefe"]<br>for index in range(<span class="drop" data-expected="2">_____</span>):<br>    print(paso[<span class="drop" data-expected="index + 1">_____</span>])</pre>',
+                options: ['2', '3', 'index', 'index + 1'],
                 correctFeedback: 'Ritual ejecutado correctamente.',
-                wrongFeedback: 'Ese no es el conjuro de repetición.'
+                wrongFeedback: 'Esos no son los pasos a seguir',
+                imageUrl: 'images/q5.png'
             }
         ];
 
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let currentIndex = 0;
+
+        function updateStats() {
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = incorrectCount;
+        }
+
+        // referencia al contenedor "viewport"
         const container = document.getElementById('quiz');
 
-        function render() {
+        let slider, cardElements;
+
+        function createCarouselStructure() {
             container.innerHTML = '';
-            questions.forEach(q => {
+
+            // style del contenedor viewport
+            container.style.overflow = "hidden";
+            container.style.width = "100%";
+            container.style.boxSizing = "border-box";
+
+            slider = document.createElement('div');
+            slider.id = "slider";
+            slider.style.display = "flex";
+            slider.style.transition = "transform 0.45s ease";
+            slider.style.willChange = "transform";
+
+            container.appendChild(slider);
+
+            questions.forEach((q, i) => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-content" style="display: flex; gap: 20px;">
-                        <!-- Mitad izquierda: contenido -->
-                        <div class="left" style="flex: 1;">
-                            <div class="tutorial">${q.tutorial}</div>
-                            <div class="explain">${q.explain}</div>
-                            <strong>${q.title}</strong>
-                            <div class="exercise-area">${q.exerciseHtml}</div>
-                            <div class="tokens" id="${q.id}-tokens"></div>
-                            <div class="controls">
-                                <button type="button" data-check="${q.id}">Comprobar</button>
-                            </div>
-                            <div id="${q.id}-fb"></div>
-                        </div>
+                card.style.boxSizing = "border-box";
+                card.style.display = "block";
+                card.style.padding = "20px";
 
-                        <!-- Mitad derecha: imagen -->
-                        <div class="right" style="flex: 1; display: flex; justify-content: center; align-items: center;">
-                            <img src="${q.imageUrl}" alt="Imagen ilustrativa" style="max-width: 100%; height: auto; border-radius: 8px;">
-                        </div>
+                // dentro del forEach, por ejemplo:
+                const isLast = (i === questions.length - 1);
+
+                card.innerHTML = `
+                <div class="card-content" style="display:flex;gap:20px;align-items:flex-start;">
+                    <div class="left" style="flex:1;">
+                    <div class="tutorial">${q.tutorial}</div>
+                    <div class="explain">${q.explain}</div>
+                    <strong>${q.title}</strong>
+                    <div class="exercise-area">${q.exerciseHtml}</div>
+                    <div class="tokens" id="${q.id}-tokens" style="display:flex;gap:8px;margin-top:10px;"></div>
+                    <div class="controls" style="margin-top:12px;">
+                        <button type="button" data-check="${q.id}">Comprobar</button>
+                        ${ !isLast
+                            ? `<button type="button" data-next="${q.id}" style="display:none;margin-left:8px;">Siguiente ➜</button>`
+                            : `<button type="button" data-next="${q.id}" style="display:none;margin-left:8px;">Finalizar ✅</button>`
+                        }
                     </div>
+                    <div class="feedback" id="${q.id}-fb" style="margin-top:8px;"></div>
+                    </div>
+                    <div class="right" style="flex:1;display:flex;justify-content:center;align-items:center;">
+                    <img src="${q.imageUrl}" alt="" style="max-width:100%;height:auto;border-radius:8px;">
+                    </div>
+                </div>
                 `;
 
-                container.appendChild(card);
+                slider.appendChild(card);
 
+                // tokens
                 const tokensContainer = card.querySelector(`#${q.id}-tokens`);
                 q.options.forEach(opt => {
                     const tok = document.createElement('div');
@@ -119,26 +157,28 @@
                     tok.draggable = true;
                     tok.dataset.value = opt;
                     tok.textContent = opt;
+                    tok.style.padding = "6px 10px";
+                    tok.style.border = "1px solid #ccc";
+                    tok.style.borderRadius = "6px";
+                    tok.style.cursor = "grab";
                     tokensContainer.appendChild(tok);
 
                     tok.addEventListener('dragstart', e => {
-                        if (!tok.classList.contains('used')) { // bloquear si ya usado
-                            e.dataTransfer.setData('text/plain', opt);
-                        } else {
-                            e.preventDefault();
-                        }
+                        if (!tok.classList.contains('used')) e.dataTransfer.setData('text/plain', opt);
+                        else e.preventDefault();
                     });
                 });
 
+                // drops
                 const drops = card.querySelectorAll('.drop');
                 drops.forEach(d => {
                     d.addEventListener('dragover', e => {
-                        e.preventDefault(); 
+                        e.preventDefault();
                         d.classList.add('over');
                     });
                     d.addEventListener('dragleave', () => d.classList.remove('over'));
                     d.addEventListener('drop', e => {
-                        e.preventDefault(); 
+                        e.preventDefault();
                         d.classList.remove('over');
                         const val = e.dataTransfer.getData('text/plain');
                         d.textContent = val;
@@ -147,7 +187,7 @@
                     });
                 });
 
-                // Botón de comprobar
+                // comprobar
                 card.querySelector(`[data-check="${q.id}"]`).addEventListener('click', () => {
                     const fb = card.querySelector(`#${q.id}-fb`);
                     fb.innerHTML = '';
@@ -156,11 +196,10 @@
                     drops.forEach(d => {
                         const expected = d.dataset.expected;
                         const current = d.dataset.current || '';
-
                         if (current === expected) {
                             d.classList.add('success');
+                            d.classList.add('used');
                             d.classList.remove('fail');
-                            d.classList.add('used'); // bloquea el drop para que no cambie
                         } else {
                             d.classList.add('fail');
                             d.classList.remove('success');
@@ -168,14 +207,14 @@
                         }
                     });
 
-                    // Feedback general debajo
                     if (allCorrect) {
                         fb.innerHTML = `<div class="feedback correct">${q.correctFeedback}</div>`;
-                        // Sumar puntos solo una vez por ejercicio completo
                         if (!fb.dataset.checked) {
                             correctCount++;
                             fb.dataset.checked = "true";
                         }
+                        // mostrar siguiente
+                        card.querySelector(`[data-next="${q.id}"]`).style.display = "inline-block";
                     } else {
                         fb.innerHTML = `<div class="feedback wrong">${q.wrongFeedback}</div>`;
                         if (!fb.dataset.checked) {
@@ -183,14 +222,90 @@
                             fb.dataset.checked = "true";
                         }
                     }
-
                     updateStats();
                 });
 
+                // next
+                const nextBtn = card.querySelector(`[data-next="${q.id}"]`);
+                if (isLast) {
+                    nextBtn.addEventListener('click', () => {
+                        // mostrar modal
+                        const modal = document.getElementById('resultModal');
+                        const modalText = document.getElementById('modalText');
+                        modalText.innerHTML = `
+                            Correctas: ${correctCount} <br>
+                            Incorrectas: ${incorrectCount}
+                        `;
+                        modal.style.display = 'flex';
+                    });
+                } else {
+                    nextBtn.addEventListener('click', () => moveNext());
+                }
+
+                // cerrar modal
+                document.getElementById('closeModal').addEventListener('click', () => {
+                    const modal = document.getElementById('resultModal');
+                    modal.style.display = 'none';
+
+                    // reiniciar contadores y stats
+                    correctCount = 0;
+                    incorrectCount = 0;
+                    updateStats();
+
+                    // volver a la primera pregunta
+                    currentIndex = 0;
+
+                    // resetear todas las tarjetas
+                    createCarouselStructure();
+                });
             });
+
+            // after creating cards, collect them
+            cardElements = Array.from(slider.children);
+
+            // establecer anchos iniciales
+            recalcSizes();
         }
 
-        render();
+        // recalc tamaños en px según el ancho real del contenedor (viewport)
+        function recalcSizes() {
+            const viewportWidth = container.clientWidth || document.documentElement.clientWidth;
+            // ancho total del slider: ancho viewport * n tarjetas
+            slider.style.width = `${viewportWidth * questions.length}px`;
+            // cada tarjeta ocupa exactamente el ancho del viewport (en px)
+            cardElements.forEach(card => {
+                card.style.minWidth = `${viewportWidth}px`;
+                card.style.maxWidth = `${viewportWidth}px`;
+            });
+            // ajustar transform para centrar la tarjeta actual
+            updateSlider();
+        }
+
+        function updateSlider() {
+            const viewportWidth = container.clientWidth || document.documentElement.clientWidth;
+            const offset = currentIndex * viewportWidth;
+            slider.style.transform = `translateX(-${offset}px)`;
+        }
+
+        function moveNext() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                updateSlider();
+            }
+        }
+
+        // reconstruir al cambiar tamaño
+        window.addEventListener('resize', () => {
+            // un pequeño debounce
+            clearTimeout(window._quizResizeTimer);
+            window._quizResizeTimer = setTimeout(() => {
+                recalcSizes();
+            }, 120);
+        });
+
+        // initial render
+        createCarouselStructure();
+
     </script>
 </body>
 </html>
