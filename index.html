@@ -15,7 +15,7 @@
     </div>
 
     <!-- Pantalla inicial para nombre y apellido + recuadro de desencriptado -->
-    <div id="startScreen" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;">
+    <div id="startScreen" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;z-index:9999;">
         <div style="background:#fff;padding:22px;border-radius:10px;min-width:320px;max-width:760px;width:94%;box-sizing:border-box;">
             <h2 style="margin-top:0;">Identifícate</h2>
             <div style="display:flex;flex-direction:column;gap:8px;">
@@ -24,7 +24,16 @@
                 <button id="startButton" style="padding:10px;border:none;background:#007bff;color:#fff;border-radius:6px;cursor:pointer;">Comenzar</button>
             </div>
         </div>
-        <button id="verifyCipher" style="padding:8px 16px;border:none;background:#17a2b8;color:#fff;border-radius:6px;cursor:pointer;">Comprobar identificador 🔍</button>
+        <!-- Verificación de identificador -->
+        <div id="cipherCheckContainer" style="background:#fff;padding:20px;border-radius:10px;margin-top:20px;width:100%;max-width:760px;box-sizing:border-box;">
+            <h2 style="margin-top:0;">Verificar identificador cifrado</h2>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;">
+                <textarea id="cipherInput" placeholder="Pega aquí el identificador cifrado"
+                    style="flex:1;min-height:90px;padding:10px;border-radius:6px;border:1px solid #ccc;resize:vertical;"></textarea>
+                <button id="cipherDecodeBtn" style="padding:10px 16px;border:none;background:#17a2b8;color:#fff;border-radius:6px;cursor:pointer;height:40px;">Desencriptar 🔍</button>
+            </div>
+            <div id="cipherOutput" style="margin-top:12px;background:#f5f5f5;padding:10px;border-radius:6px;min-height:50px;white-space:pre-wrap;word-break:break-word;border:1px solid #ccc;"></div>
+        </div>
     </div>
 
     <div id="quiz"></div>
@@ -364,12 +373,10 @@
         // función inversa para decodificar el identificador
         function decodeData(base64) {
             try {
-                // intenta la versión UTF-8 segura
                 const json = decodeURIComponent(escape(atob(base64)));
                 return JSON.parse(json);
             } catch (e) {
                 try {
-                    // fallback simple
                     return JSON.parse(atob(base64));
                 } catch (e2) {
                     return null;
@@ -397,33 +404,26 @@
             createCarouselStructure();
         });
 
-        // Lógica del botón "Comprobar identificador"
-        document.getElementById('verifyCipher').addEventListener('click', () => {
-            const modal = document.getElementById('resultModal');
-            const cipher = modal.dataset.cipher;
-            const out = document.getElementById('verifyResult');
-            out.innerHTML = '';
-
-            if (!cipher) {
-                out.textContent = 'No hay identificador para verificar.';
+        document.getElementById('cipherDecodeBtn').addEventListener('click', () => {
+            const input = document.getElementById('cipherInput').value.trim();
+            const output = document.getElementById('cipherOutput');
+            
+            if (!input) {
+                output.textContent = 'Introduce un identificador cifrado para desencriptar.';
                 return;
             }
 
-            const decoded = decodeData(cipher);
+            const decoded = decodeData(input);
+
             if (!decoded) {
-                out.textContent = 'Identificador inválido o corrupto.';
+                output.textContent = 'No se pudo desencriptar o el contenido no es JSON válido.';
                 return;
             }
 
-            // Comprobamos contra el estado actual de la sesión (nombre/apellidos y contadores)
-            const matchNow = (decoded.firstName === firstName) &&
-                             (decoded.lastName === lastName) &&
-                             (Number(decoded.correct) === Number(correctCount)) &&
-                             (Number(decoded.incorrect) === Number(incorrectCount));
 
-            out.innerHTML = `<strong>Contenido descifrado:</strong>
-                             <pre style="background:#f5f5f5;padding:8px;border-radius:6px;">${JSON.stringify(decoded, null, 2)}</pre>
-                             <div style="margin-top:6px;">Resultado de la verificación: <strong>${matchNow ? 'Coincide ✅' : 'No coincide ⚠️'}</strong></div>`;
+
+            // Mostrar de forma legible
+            output.textContent = JSON.stringify(decoded, null, 2);
         });
 
         // No renderizar el quiz hasta que el usuario ingrese su nombre.
