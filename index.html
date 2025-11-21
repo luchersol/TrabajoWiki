@@ -14,13 +14,27 @@
         ✔️ Correctas: <span id="correct-count">0</span> &nbsp;&nbsp; ❌ Incorrectas: <span id="incorrect-count">0</span>
     </div>
 
+    <!-- Pantalla inicial para nombre y apellido + recuadro de desencriptado -->
+    <div id="startScreen" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;">
+        <div style="background:#fff;padding:22px;border-radius:10px;min-width:320px;max-width:760px;width:94%;box-sizing:border-box;">
+            <h2 style="margin-top:0;">Identifícate</h2>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <input id="firstName" placeholder="Nombre" style="padding:8px;border-radius:6px;border:1px solid #ccc;">
+                <input id="lastName" placeholder="Apellido" style="padding:8px;border-radius:6px;border:1px solid #ccc;">
+                <button id="startButton" style="padding:10px;border:none;background:#007bff;color:#fff;border-radius:6px;cursor:pointer;">Comenzar</button>
+            </div>
+        </div>
+        <button id="verifyCipher" style="padding:8px 16px;border:none;background:#17a2b8;color:#fff;border-radius:6px;cursor:pointer;">Comprobar identificador 🔍</button>
+    </div>
+
     <div id="quiz"></div>
 
     <div id="resultModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;">
-        <div style="background:#fff;padding:30px;border-radius:12px;max-width:400px;width:90%;text-align:center;position:relative;">
+        <div style="background:#fff;padding:30px;border-radius:12px;max-width:520px;width:92%;text-align:center;position:relative;">
             <h2>¡Has completado el módulo!</h2>
             <p id="modalText"></p>
-            <button id="closeModal" style="margin-top:20px;padding:8px 16px;border:none;background:#28a745;color:#fff;border-radius:6px;cursor:pointer;">Reiniciar 🔄</button>
+            <button id="closeModal" style="padding:8px 16px;border:none;background:#28a745;color:#fff;border-radius:6px;cursor:pointer;">Reiniciar 🔄</button>
+            <div id="verifyResult" style="margin-top:12px;color:#333;text-align:left;"></div>
         </div>
     </div>
 
@@ -38,55 +52,58 @@
                 wrongFeedback: 'El mundo no entienden mensajes sin comillas.',
                 imageUrl: 'images/q1.png'
             },
-            {
-                id: "q2",
-                tutorial: "Las variables son cofres donde guardamos tesoros (valores). Para asignar un valor a una variable, usamos el símbolo `=`. Por ejemplo, `oro = 100` guarda el número 100 dentro de la variable 'oro'.",
-                explain: "En la Cueva de los Datos necesitas guardar valores dentro de cofres (variables).",
-                title: "2) Guardar un tesoro en una variable",
-                exerciseHtml: 'Completa el cofre: <pre class="exercise">oro <span class="drop" data-expected="=">_____</span> <span class="drop" data-expected="100">_____</span></pre>',
-                options: ['=', '==', '100', '"100"'],
-                correctFeedback: '¡Tesoro asegurado! = asigna un valor a la variable.',
-                wrongFeedback: 'Ese cofre no se cierra. Usa = para guardar el valor.',
-                imageUrl: 'images/q2.png'
-            },
-            {
-                id: "q3",
-                tutorial: "Las listas en Python son colecciones de elementos ordenados. Python empieza a contar desde 0, así que el primer elemento está en la posición 0, el segundo en la 1, y así sucesivamente.",
-                explain: "Dentro de la Piramide de los Arreglos encuentras listas antiguas. Para leerlas, debes recordar que empiezan en 0.",
-                title: "3) Leer un símbolo antiguo",
-                exerciseHtml: 'Descifra: <pre class="exercise">runas = ["luna", "estrella", "sol"]\nprint(runas[<span class="drop" data-expected="2">_____</span>])</pre>',
-                options: ['0', '1', '2', '3'],
-                correctFeedback: 'Correcto. La runa 2 es "sol".',
-                wrongFeedback: 'Esa no es la runa. Revisa la numeración.',
-                imageUrl: 'images/q3.png'
-            },
-            {
-                id: "q4",
-                tutorial: "Las condiciones permiten que tu código tome decisiones. La instrucción `if` comprueba si algo es verdadero, y solo entonces ejecuta el bloque de código dentro.",
-                explain: "Llegas al Puente del Juicio. Solo pasarás si sabes usar correctamente las condiciones.",
-                title: "4) Evaluar una condición",
-                exerciseHtml: 'Comprueba el viento: <pre class="exercise">viento = 9\n<span class="drop" data-expected="if">_____</span> viento <span class="drop" data-expected="<">_____</span> 10:<br>    print("Viento inferior a 10")</pre>',
-                options: ['if', 'elif', '>', '<', 'else'],
-                correctFeedback: '¡El viento está calmado! if viento < 10.',
-                wrongFeedback: '¿Seguro que estás comprobando bien?',
-                imageUrl: 'images/q4.png'
-            },
-            {
-                id: "q5",
-                tutorial: "En Python, un bucle *for* sirve para repetir instrucciones. La función *range(n)* genera una secuencia de números desde 0 hasta n-1. Por ejemplo, range(2) produce 0 y 1, así que el bloque dentro del for se ejecuta dos veces.<br>",
-                explain: "Estás en la Torre del Tiempo, donde los bucles controlan el flujo.",
-                title: "5) Muestra todos los pasos <u>saltándote el primero</u>",
-                exerciseHtml: 'Completa: <pre class="exercise">pasos = ["Revisar hora", "Subir torre", "Vencer jefe"]<br>for index in range(<span class="drop" data-expected="2">_____</span>):<br>    print(paso[<span class="drop" data-expected="index + 1">_____</span>])</pre>',
-                options: ['2', '3', 'index', 'index + 1'],
-                correctFeedback: 'Ritual ejecutado correctamente.',
-                wrongFeedback: 'Esos no son los pasos a seguir',
-                imageUrl: 'images/q5.png'
-            }
+            // {
+            //     id: "q2",
+            //     tutorial: "Las variables son cofres donde guardamos tesoros (valores). Para asignar un valor a una variable, usamos el símbolo `=`. Por ejemplo, `oro = 100` guarda el número 100 dentro de la variable 'oro'.",
+            //     explain: "En la Cueva de los Datos necesitas guardar valores dentro de cofres (variables).",
+            //     title: "2) Guardar un tesoro en una variable",
+            //     exerciseHtml: 'Completa el cofre: <pre class="exercise">oro <span class="drop" data-expected="=">_____</span> <span class="drop" data-expected="100">_____</span></pre>',
+            //     options: ['=', '==', '100', '"100"'],
+            //     correctFeedback: '¡Tesoro asegurado! = asigna un valor a la variable.',
+            //     wrongFeedback: 'Ese cofre no se cierra. Usa = para guardar el valor.',
+            //     imageUrl: 'images/q2.png'
+            // },
+            // {
+            //     id: "q3",
+            //     tutorial: "Las listas en Python son colecciones de elementos ordenados. Python empieza a contar desde 0, así que el primer elemento está en la posición 0, el segundo en la 1, y así sucesivamente.",
+            //     explain: "Dentro de la Piramide de los Arreglos encuentras listas antiguas. Para leerlas, debes recordar que empiezan en 0.",
+            //     title: "3) Leer un símbolo antiguo",
+            //     exerciseHtml: 'Descifra: <pre class="exercise">runas = ["luna", "estrella", "sol"]\nprint(runas[<span class="drop" data-expected="2">_____</span>])</pre>',
+            //     options: ['0', '1', '2', '3'],
+            //     correctFeedback: 'Correcto. La runa 2 es "sol".',
+            //     wrongFeedback: 'Esa no es la runa. Revisa la numeración.',
+            //     imageUrl: 'images/q3.png'
+            // },
+            // {
+            //     id: "q4",
+            //     tutorial: "Las condiciones permiten que tu código tome decisiones. La instrucción `if` comprueba si algo es verdadero, y solo entonces ejecuta el bloque de código dentro.",
+            //     explain: "Llegas al Puente del Juicio. Solo pasarás si sabes usar correctamente las condiciones.",
+            //     title: "4) Evaluar una condición",
+            //     exerciseHtml: 'Comprueba el viento: <pre class="exercise">viento = 9\n<span class="drop" data-expected="if">_____</span> viento <span class="drop" data-expected="<">_____</span> 10:<br>    print("Viento inferior a 10")</pre>',
+            //     options: ['if', 'elif', '>', '<', 'else'],
+            //     correctFeedback: '¡El viento está calmado! if viento < 10.',
+            //     wrongFeedback: '¿Seguro que estás comprobando bien?',
+            //     imageUrl: 'images/q4.png'
+            // },
+            // {
+            //     id: "q5",
+            //     tutorial: "En Python, un bucle *for* sirve para repetir instrucciones. La función *range(n)* genera una secuencia de números desde 0 hasta n-1. Por ejemplo, range(2) produce 0 y 1, así que el bloque dentro del for se ejecuta dos veces.<br>",
+            //     explain: "Estás en la Torre del Tiempo, donde los bucles controlan el flujo.",
+            //     title: "5) Muestra todos los pasos <u>saltándote el primero</u>",
+            //     exerciseHtml: 'Completa: <pre class="exercise">pasos = ["Revisar hora", "Subir torre", "Vencer jefe"]<br>for index in range(<span class="drop" data-expected="2">_____</span>):<br>    print(paso[<span class="drop" data-expected="index + 1">_____</span>])</pre>',
+            //     options: ['2', '3', 'index', 'index + 1'],
+            //     correctFeedback: 'Ritual ejecutado correctamente.',
+            //     wrongFeedback: 'Esos no son los pasos a seguir',
+            //     imageUrl: 'images/q5.png'
+            // }
         ];
 
         let correctCount = 0;
         let incorrectCount = 0;
         let currentIndex = 0;
+
+        let firstName = '';
+        let lastName = '';
 
         function updateStats() {
             document.getElementById('correct-count').textContent = correctCount;
@@ -228,14 +245,35 @@
                 // next
                 const nextBtn = card.querySelector(`[data-next="${q.id}"]`);
                 if (isLast) {
-                    nextBtn.addEventListener('click', () => {
-                        // mostrar modal
+                    nextBtn.addEventListener('click', async () => {
+                        // mostrar modal con texto cifrado que identifica nombre, apellido y resultados
                         const modal = document.getElementById('resultModal');
                         const modalText = document.getElementById('modalText');
+
+                        const payload = {
+                            firstName: firstName,
+                            lastName: lastName,
+                            correct: correctCount,
+                            incorrect: incorrectCount,
+                            date: new Date()
+                        };
+
+                        const cipher = encodeData(payload);
+
+                        // guardar el cipher en dataset para que el botón de verificación lo lea
+                        modal.dataset.cipher = cipher;
+
+
+                        // Render inicial
                         modalText.innerHTML = `
                             Correctas: ${correctCount} <br>
-                            Incorrectas: ${incorrectCount}
+                            Incorrectas: ${incorrectCount} <br><br>
+                            Identificador cifrado:<br>
+
+                            <pre style="word-break:break-all; background:#f5f5f5;padding:8px;border-radius:6px;white-space:pre-wrap;max-height:none;overflow:visible;">${cipher}</pre>
                         `;
+                        // limpiar resultado de verificación anterior
+                        document.getElementById('verifyResult').innerHTML = '';
                         modal.style.display = 'flex';
                     });
                 } else {
@@ -255,8 +293,17 @@
                     // volver a la primera pregunta
                     currentIndex = 0;
 
-                    // resetear todas las tarjetas
-                    createCarouselStructure();
+                    // resetear nombre/apellido para que se pida de nuevo
+                    firstName = '';
+                    lastName = '';
+
+                    // mostrar pantalla inicial
+                    document.getElementById('firstName').value = '';
+                    document.getElementById('lastName').value = '';
+                    document.getElementById('startScreen').style.display = 'flex';
+
+                    // limpiar quiz
+                    container.innerHTML = '';
                 });
             });
 
@@ -269,6 +316,7 @@
 
         // recalc tamaños en px según el ancho real del contenedor (viewport)
         function recalcSizes() {
+            if (!slider) return;
             const viewportWidth = container.clientWidth || document.documentElement.clientWidth;
             // ancho total del slider: ancho viewport * n tarjetas
             slider.style.width = `${viewportWidth * questions.length}px`;
@@ -303,8 +351,83 @@
             }, 120);
         });
 
-        // initial render
-        createCarouselStructure();
+        // función simple de "cifrado" (base64 de JSON) para mostrar identificador
+        function encodeData(obj) {
+            const str = JSON.stringify(obj);
+            try {
+                return btoa(unescape(encodeURIComponent(str)));
+            } catch (e) {
+                return btoa(str);
+            }
+        }
+
+        // función inversa para decodificar el identificador
+        function decodeData(base64) {
+            try {
+                // intenta la versión UTF-8 segura
+                const json = decodeURIComponent(escape(atob(base64)));
+                return JSON.parse(json);
+            } catch (e) {
+                try {
+                    // fallback simple
+                    return JSON.parse(atob(base64));
+                } catch (e2) {
+                    return null;
+                }
+            }
+        }
+
+        // Start button logic
+        document.getElementById('startButton').addEventListener('click', () => {
+            const fn = document.getElementById('firstName').value.trim();
+            const ln = document.getElementById('lastName').value.trim();
+            if (!fn || !ln) {
+                alert('Por favor ingresa nombre y apellido para continuar.');
+                return;
+            }
+            firstName = fn;
+            lastName = ln;
+            document.getElementById('startScreen').style.display = 'none';
+
+            // inicializar estadísticas y generar estructura
+            correctCount = 0;
+            incorrectCount = 0;
+            updateStats();
+            currentIndex = 0;
+            createCarouselStructure();
+        });
+
+        // Lógica del botón "Comprobar identificador"
+        document.getElementById('verifyCipher').addEventListener('click', () => {
+            const modal = document.getElementById('resultModal');
+            const cipher = modal.dataset.cipher;
+            const out = document.getElementById('verifyResult');
+            out.innerHTML = '';
+
+            if (!cipher) {
+                out.textContent = 'No hay identificador para verificar.';
+                return;
+            }
+
+            const decoded = decodeData(cipher);
+            if (!decoded) {
+                out.textContent = 'Identificador inválido o corrupto.';
+                return;
+            }
+
+            // Comprobamos contra el estado actual de la sesión (nombre/apellidos y contadores)
+            const matchNow = (decoded.firstName === firstName) &&
+                             (decoded.lastName === lastName) &&
+                             (Number(decoded.correct) === Number(correctCount)) &&
+                             (Number(decoded.incorrect) === Number(incorrectCount));
+
+            out.innerHTML = `<strong>Contenido descifrado:</strong>
+                             <pre style="background:#f5f5f5;padding:8px;border-radius:6px;">${JSON.stringify(decoded, null, 2)}</pre>
+                             <div style="margin-top:6px;">Resultado de la verificación: <strong>${matchNow ? 'Coincide ✅' : 'No coincide ⚠️'}</strong></div>`;
+        });
+
+        // No renderizar el quiz hasta que el usuario ingrese su nombre.
+        updateStats();
 
     </script>
 </body>
