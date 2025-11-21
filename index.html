@@ -61,50 +61,50 @@
                 wrongFeedback: 'El mundo no entienden mensajes sin comillas.',
                 imageUrl: 'images/q1.png'
             },
-            // {
-            //     id: "q2",
-            //     tutorial: "Las variables son cofres donde guardamos tesoros (valores). Para asignar un valor a una variable, usamos el símbolo `=`. Por ejemplo, `oro = 100` guarda el número 100 dentro de la variable 'oro'.",
-            //     explain: "En la Cueva de los Datos necesitas guardar valores dentro de cofres (variables).",
-            //     title: "2) Guardar un tesoro en una variable",
-            //     exerciseHtml: 'Completa el cofre: <pre class="exercise">oro <span class="drop" data-expected="=">_____</span> <span class="drop" data-expected="100">_____</span></pre>',
-            //     options: ['=', '==', '100', '"100"'],
-            //     correctFeedback: '¡Tesoro asegurado! = asigna un valor a la variable.',
-            //     wrongFeedback: 'Ese cofre no se cierra. Usa = para guardar el valor.',
-            //     imageUrl: 'images/q2.png'
-            // },
-            // {
-            //     id: "q3",
-            //     tutorial: "Las listas en Python son colecciones de elementos ordenados. Python empieza a contar desde 0, así que el primer elemento está en la posición 0, el segundo en la 1, y así sucesivamente.",
-            //     explain: "Dentro de la Piramide de los Arreglos encuentras listas antiguas. Para leerlas, debes recordar que empiezan en 0.",
-            //     title: "3) Leer un símbolo antiguo",
-            //     exerciseHtml: 'Descifra: <pre class="exercise">runas = ["luna", "estrella", "sol"]\nprint(runas[<span class="drop" data-expected="2">_____</span>])</pre>',
-            //     options: ['0', '1', '2', '3'],
-            //     correctFeedback: 'Correcto. La runa 2 es "sol".',
-            //     wrongFeedback: 'Esa no es la runa. Revisa la numeración.',
-            //     imageUrl: 'images/q3.png'
-            // },
-            // {
-            //     id: "q4",
-            //     tutorial: "Las condiciones permiten que tu código tome decisiones. La instrucción `if` comprueba si algo es verdadero, y solo entonces ejecuta el bloque de código dentro.",
-            //     explain: "Llegas al Puente del Juicio. Solo pasarás si sabes usar correctamente las condiciones.",
-            //     title: "4) Evaluar una condición",
-            //     exerciseHtml: 'Comprueba el viento: <pre class="exercise">viento = 9\n<span class="drop" data-expected="if">_____</span> viento <span class="drop" data-expected="<">_____</span> 10:<br>    print("Viento inferior a 10")</pre>',
-            //     options: ['if', 'elif', '>', '<', 'else'],
-            //     correctFeedback: '¡El viento está calmado! if viento < 10.',
-            //     wrongFeedback: '¿Seguro que estás comprobando bien?',
-            //     imageUrl: 'images/q4.png'
-            // },
-            // {
-            //     id: "q5",
-            //     tutorial: "En Python, un bucle *for* sirve para repetir instrucciones. La función *range(n)* genera una secuencia de números desde 0 hasta n-1. Por ejemplo, range(2) produce 0 y 1, así que el bloque dentro del for se ejecuta dos veces.<br>",
-            //     explain: "Estás en la Torre del Tiempo, donde los bucles controlan el flujo.",
-            //     title: "5) Muestra todos los pasos <u>saltándote el primero</u>",
-            //     exerciseHtml: 'Completa: <pre class="exercise">pasos = ["Revisar hora", "Subir torre", "Vencer jefe"]<br>for index in range(<span class="drop" data-expected="2">_____</span>):<br>    print(paso[<span class="drop" data-expected="index + 1">_____</span>])</pre>',
-            //     options: ['2', '3', 'index', 'index + 1'],
-            //     correctFeedback: 'Ritual ejecutado correctamente.',
-            //     wrongFeedback: 'Esos no son los pasos a seguir',
-            //     imageUrl: 'images/q5.png'
-            // }
+            {
+                id: "q2",
+                tutorial: "Las variables son cofres donde guardamos tesoros (valores). Para asignar un valor a una variable, usamos el símbolo `=`. Por ejemplo, `oro = 100` guarda el número 100 dentro de la variable 'oro'.",
+                explain: "En la Cueva de los Datos necesitas guardar valores dentro de cofres (variables).",
+                title: "2) Guardar un tesoro en una variable",
+                exerciseHtml: 'Completa el cofre: <pre class="exercise">oro <span class="drop" data-expected="=">_____</span> <span class="drop" data-expected="100">_____</span></pre>',
+                options: ['=', '==', '100', '"100"'],
+                correctFeedback: '¡Tesoro asegurado! = asigna un valor a la variable.',
+                wrongFeedback: 'Ese cofre no se cierra. Usa = para guardar el valor.',
+                imageUrl: 'images/q2.png'
+            },
+            {
+                id: "q3",
+                tutorial: "Las listas en Python son colecciones de elementos ordenados. Python empieza a contar desde 0, así que el primer elemento está en la posición 0, el segundo en la 1, y así sucesivamente.",
+                explain: "Dentro de la Piramide de los Arreglos encuentras listas antiguas. Para leerlas, debes recordar que empiezan en 0.",
+                title: "3) Leer un símbolo antiguo",
+                exerciseHtml: 'Descifra: <pre class="exercise">runas = ["luna", "estrella", "sol"]\nprint(runas[<span class="drop" data-expected="2">_____</span>])</pre>',
+                options: ['0', '1', '2', '3'],
+                correctFeedback: 'Correcto. La runa 2 es "sol".',
+                wrongFeedback: 'Esa no es la runa. Revisa la numeración.',
+                imageUrl: 'images/q3.png'
+            },
+            {
+                id: "q4",
+                tutorial: "Las condiciones permiten que tu código tome decisiones. La instrucción `if` comprueba si algo es verdadero, y solo entonces ejecuta el bloque de código dentro.",
+                explain: "Llegas al Puente del Juicio. Solo pasarás si sabes usar correctamente las condiciones.",
+                title: "4) Evaluar una condición",
+                exerciseHtml: 'Comprueba el viento: <pre class="exercise">viento = 9\n<span class="drop" data-expected="if">_____</span> viento <span class="drop" data-expected="<">_____</span> 10:<br>    print("Viento inferior a 10")</pre>',
+                options: ['if', 'elif', '>', '<', 'else'],
+                correctFeedback: '¡El viento está calmado! if viento < 10.',
+                wrongFeedback: '¿Seguro que estás comprobando bien?',
+                imageUrl: 'images/q4.png'
+            },
+            {
+                id: "q5",
+                tutorial: "En Python, un bucle *for* sirve para repetir instrucciones. La función *range(n)* genera una secuencia de números desde 0 hasta n-1. Por ejemplo, range(2) produce 0 y 1, así que el bloque dentro del for se ejecuta dos veces.<br>",
+                explain: "Estás en la Torre del Tiempo, donde los bucles controlan el flujo.",
+                title: "5) Muestra todos los pasos <u>saltándote el primero</u>",
+                exerciseHtml: 'Completa: <pre class="exercise">pasos = ["Revisar hora", "Subir torre", "Vencer jefe"]<br>for index in range(<span class="drop" data-expected="2">_____</span>):<br>    print(paso[<span class="drop" data-expected="index + 1">_____</span>])</pre>',
+                options: ['2', '3', 'index', 'index + 1'],
+                correctFeedback: 'Ritual ejecutado correctamente.',
+                wrongFeedback: 'Esos no son los pasos a seguir',
+                imageUrl: 'images/q5.png'
+            }
         ];
 
         let correctCount = 0;
